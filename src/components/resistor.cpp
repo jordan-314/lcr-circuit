@@ -4,7 +4,7 @@
 #ifndef resistor
 #define resistor
 
-#include <compenents.cpp>
+#include <compenent.cpp>
 
 #include <string>
 
@@ -21,7 +21,7 @@ class Resistor: public Compenent {
     */
 
     public:
-        NonIdealResistor(
+        Resistor(
             double resistance,
             double capacitance,
             double inductance,
@@ -29,7 +29,7 @@ class Resistor: public Compenent {
             this->set_impedance()
         }
 
-        NonIdealResistor() {
+        Resistor() {
             this->resistance {0};
             this->capacitcance {0};
             this->inductance {0};
@@ -62,7 +62,8 @@ void Resistor::set_impedance() {
 
     double omega {2 * pi * this->frequency};
     // Common denomintor for both Re and Im
-    double denominator {1 + std::pow(omega * this->resistance * this->capacitance, 2)};
+    double denominator {1 + std::pow(omega * this->resistance * 
+        this->capacitance, 2)};
     double real {this->resistance / denominator};
 
     // Split Im up into three terms
