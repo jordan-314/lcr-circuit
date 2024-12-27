@@ -22,8 +22,6 @@ void Resistor::set_impedance() {
     Im = (wL - wC(R^2) + (w^3)(C^2)(R^2)L) / (1+ (wRC^2))
     */
 
-
-
     double omega { 2 * std::numbers::pi * this->frequency },
     // Common denomintor for both Re and Im
     denominator { 1 + std::pow(omega * this->resistance * this->capacitance, 2) };
