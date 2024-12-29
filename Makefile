@@ -2,7 +2,7 @@
 CXX = g++
 
 # Compilation flags
-CXXFLAGS = -std=c++20 -I./includes/
+CXXFLAGS = -std=c++20 -I./includes/ -o lcr.out
 
 # Directories
 SRC_DIR = src
