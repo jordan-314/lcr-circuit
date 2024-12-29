@@ -23,20 +23,22 @@ void Resistor::set_impedance() {
     */
 
     double omega { 2 * std::numbers::pi * this->frequency },
+        r {this->parameters[0]},
+        c {this->parameters[1]},
+        l {this->parameters[2]};
     // Common denomintor for both Re and Im
-    denominator { 1 + std::pow(omega * this->resistance * this->capacitance, 2) };
-    real { this->resistance / denominator };
+    double denominator { 1 + std::pow(omega * r * c, 2) },
+        real { r / denominator };
 
     // Split Im up into three terms
-    double term_one {omega * this->inductance},
-    term_two {omega * this->capacitance * std::pow(this->resistance, 2)},
-    term_three { std::pow(omega, 3) * std::pow(this->capacitance, 2) * 
-                    std::pow(this->resistance, 2) * this->inductance },
-    // Define imaginary component from previous terms
-    imag {(term_one - term_two + term_three) / denominator };
+    double term_one {omega * l},
+        term_two {omega * c * std::pow(r, 2)},
+        term_three { std::pow(omega, 3) * std::pow(c, 2) * std::pow(r, 2) * l },
+        // Define imaginary component from previous terms
+        imag {(term_one - term_two + term_three) / denominator };
 
     // set impedance
-    this->impedance {real, imag};
+    this->impedance = {real, imag};
 }
 
 
@@ -53,10 +55,13 @@ void Capacitor::set_impedance() {
     */
 
     double omega {2 * std::numbers::pi * this->frequency},
-    real {this->resistance},
-    imag {omega * this->inducatnce - 1 / (omega * this->capacitance)};
+        r {this->parameters[0]},
+        c {this->parameters[1]},
+        l {this->parameters[2]};
+    double real {r},
+        imag {omega * l - 1 / (omega * c)};
 
-    this->impedance {real, imag};
+    this->impedance = {real, imag};
 }
 
 
@@ -73,21 +78,25 @@ void Inductor::set_impedance() {
     */
 
     double omega {2 * std::numbers::pi * this->frequency},
+        r {this->parameters[0]},
+        c {this->parameters[1]},
+        l {this->parameters[2]};
+
     // break up common denominator into two terms
-    term_one { std::pow(1 - this->inducatnce * this->capacitance * std::pow(omega, 2), 2) },
-    term_two { std::pow(omega * this->resistance * this->capacitance, 2) },
-    // Define denominator from both terms.
-    denominator {term_one + term_two},
-    // Define the real component of the impedance
-    real {this->resistance / denominator};
+    double term_one { std::pow(1 - l * c * std::pow(omega, 2), 2) },
+        term_two { std::pow(omega * r * c, 2) },
+        // Define denominator from both terms.
+        denominator {term_one + term_two},
+        // Define the real component of the impedance
+        real {r / denominator};
 
     // break up Im into three terms (overriding previous term variables)
-    term_one = omega * this->inducatnce;
-    term_two = std::pow(omega, 3) * std::pow(this->inducatnce, 2) * this->capacitance;
-    double term_three {omega * this->capacitance * std::pow(this->resistance, 2)},
+    term_one = omega * l;
+    term_two = std::pow(omega, 3) * std::pow(l, 2) * c;
+    double term_three {omega * c * std::pow(r, 2)},
     // construct imaginary component from all previous terms.
-    imag {term_one - term_two - term_three} / denominator
+    imag { (term_one - term_two - term_three) / denominator };
 
     // set impedance
-    this->impedance {real, imag};   
+    this->impedance = {real, imag};   
 }
